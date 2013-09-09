@@ -1,0 +1,36 @@
+<!--Close the Main Content Div-->
+</div>
+
+<!--Footer-->
+<div id="footer">
+
+  <p>
+    Research Computing and Cyberinfrastructure is committed to making its websites accessible to all users<br>and welcomes comments or suggestions on access improvements.<br>Please <a href="/contact.shtml">contact us</a> if you have comments or suggestions on accessibility.
+  </p>
+
+  <p>
+    <a href="/about">About Us</a>  |  <a href="/contact.shtml">Contact Us</a><br />
+    <a href="http://www.psu.edu/ur/copyright.html">Copyright</a> &copy;2011, <a href="http://www.psu.edu/" title="Penn State home page.">The Pennsylvania State University</a> | <a href="http://www.psu.edu/ur/legal.html" title="Official statements on privacy, nondiscrimination, equal opportunity and copyright.">Privacy and Legal Statements</a> | <a href="http://www.psu.edu/ur/hotline.html" title="Penn State Hotline information">Hotlines</a>
+    <br />
+    Research Computing and Cyberinfrastructure is a unit of <a href="http://its.psu.edu">Information Technology Services</a>.
+  </p>
+
+</div>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17534855-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+ 
+</body>
+</html>

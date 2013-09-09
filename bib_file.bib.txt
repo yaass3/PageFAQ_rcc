@@ -1,0 +1,7 @@
+@ONLINE{newtest,
+  author = {Bruin, J.},
+  title = {newtest: command to compute new test {@ONLINE}},
+  month = Nov,
+  year = {2012},
+  url = {http://rcc.its.psu.edu/.}
+}

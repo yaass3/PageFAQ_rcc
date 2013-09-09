@@ -1,0 +1,67 @@
+  <!--Navigation-->
+  <div class="chromestyle" id="chromemenu">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/resources/" rel="dropmenu1">Resources</a>
+</li>
+      <li><a href="/user_guides/" rel="dropmenu2">User Guides</a></li>
+      <li><a href="/consulting/" rel="dropmenu3">Consulting</a></li>
+      <li><a href="/education/" rel="dropmenu4">Education</a></li>
+      <!--
+      <li><a href="/news/">News</a></li>
+      -->
+      <li><a href="/partners/">Partners</a></li>
+      <li><a href="/about/">About Us</a></li>
+   </ul>
+  </div>
+
+<!--
+<div id="breadcrumbs">
+  <ul>
+    <li>/ <a href="#">rcc</a></li>
+    <li>/ <a href="#">hpc</a></li>
+    <li>/ <a href="#">ice cream</a></li>
+  </li>
+</div>
+-->
+
+  <!--1st drop down menu - RESOURCES -->
+  <div id="dropmenu1" class="dropmenudiv">
+    <a href="/resources/accounts">Accounts</a>    
+    <a href="/resources/hpc">High Performance Computing Systems</a>
+    <a href="/resources/facilities_partnerships">Visualization Facilities</a>
+    <!--<a href="/resources/data_storage">Data Storage</a>-->
+    <a href="/resources/software/">Software</a>
+    <a href="/resources/telecollaboration">Telecollaboration</a>
+  </div>  
+
+  <!--2nd drop down menu - USERGUIDES  -->  
+  <div id="dropmenu2" class="dropmenudiv" style="width: 300px;">    
+    <a href="/user_guides/systems">Systems</a>    
+    <a href="/user_guides/system_utilities">System Utilities</a>    
+    <a href="/user_guides/file_transfer">File Transfer</a>    
+    <a href="/user_guides/remote_connectivity">Remote Connectivity</a>
+    <a href="/user_guides/remote_display">Remote Display</a>
+  </div>
+
+  <!--3rd drop down menu - SERVICES -->
+  <div id="dropmenu3" class="dropmenudiv" style="width: 200px;">
+    <a href="/consulting/domain_expertise">Domain Expertise</a>
+    <a href="/consulting/software_programming">Software Development / Programming Support</a>
+    <a href="/consulting/visualization">Visualization Consulting</a>
+  </div>
+
+  <!--4th drop down menu - EDUCATION -->
+  <div id="dropmenu4" class="dropmenudiv" style="width: 300px;">
+    <a href="/education/seminars">Seminars</a>
+    <a href="/education/workshops">Workshops</a>
+    <a href="/education/tutorials">Tutorials</a>
+    <a href="/education/user_groups">User Groups</a>
+    <a href="/education/case_studies">Case Studies</a>
+    <a href="/education/white_papers">White Papers</a>
+  </div>
+
+  <script type="text/javascript">
+    cssdropdown.startchrome("chromemenu")
+  </script>
+

@@ -1,0 +1,914 @@
+updates to the FAQ lists
+
+R
+
+I have been trying to download the lastest version of R studio on hammer, but with no luck. What is the easiest way to do this? I went on the CRAN website and tried both downloading the program and typing commands in the terminal for Linux systems. I need the latest version to use some newer packages supported by R.
+
+Which version of R would you like R studio installed against & which packages within R would you like installed?
+
+
+General
+
+ I wrote some executable shell scripts to deal with my data, could you please tell me where  I should  put these files. I once made a new file called bin in my account and add the path to $PATH in linux, but it seems that the system can delete the change I made. I succeed in using my program that day but it does not work the second day.
+ 
+  Another question is that I know I can use alias qsta='qstat -u gzy105' to set a hotkey, it seems that the system can also delete the change I made. How can I make it a permanant change for me?
+ 
+
+Answer
+To make these types of changes happen automatically on a new login
+session, you have to put them in a file called .bashrc that's in your
+home directory.  You should put them at the end of the .bashrc after the
+lines that are in the file by default.
+
+Question
+
+I am a graduate student in the bioinformatics and genomics PhD program. I recently joined Dr Shaun Mahony's lab. 
+
+Could you provide me access to the lionxg-pughhpc priority queue?
+
+Answer
+
+Please send us an email at rcc@rcc.its.psu.edu and we will add you to the queue.
+
+
+Question
+The firefox browser in Hammer as well as the solver in COMSOL will not function properly, so the reset didn't do what I had hoped.
+
+Answer
+Most likely your home directory is full, please check your quota on your home and work directory. These apps will not function until the condition is remedied by deleting/moving files including your trash files from your home dir. 
+you can check the quota on your disk by XXX 
+
+
+
+Question
+
+I am a novice bioinfomatician who works in the biostar clusters. I am trying to write and submit a script that after some initial preprocessing writes a script and submit it. How do it to submit in biostar? Also is it possible to write a sh script within pbs script?
+Answer
+The information at our website here : http://rcc.its.psu.edu/user_guides/system_utilities/pbs/ may have the information you need. If not, could you elaborate a little more eg., what sort of application(s) are you wanting to run? What are the requirements for your application eg., memory, file i/o etc?
+
+The following is a bash script which writes a pbs script, that can be modified to submit to the cluster if you replace 'more' with 'qsub', but this may not be what you're after.
+
+
+cheers, bill
+
+ #!/bin/bash
+
+
+for (( i=1; i<=4; i++ ))
+
+do
+
+y=$(echo "($i-1)*2+1" | bc)
+
+cat > $i_$y".pbs" << END
+
+
+        #PBS -l nodes=1:ppn=1
+        #PBS -l walltime=4:00:00
+        #PBS -l pmem=1gb
+        #PBS -j oe
+        #
+        cd \$PBS_O_WORKDIR
+        #
+        #Run an application, script etc which takes command line arguments to alter running conditions
+        #Need to ensure file i/o is handled correctly for multiple concurrent processes
+        echo " "
+        echo " "
+        echo "Job started on \`hostname\` at \`date\`"
+        ./batch_application $y $i
+        echo " "
+        echo "Job Ended at \`date\`"
+        echo " "
+
+
+
+END
+
+more $i_$y".pbs"
+
+done
+
+exit
+
+
+
+
+Hi,
+Until yesterday, I have used the HPC clusters interactively, and I just submitted several .pbs file for the first time yesterday to Lion-XC.  I used qstat to get information on the queue for Lion-XC (screenshot below- my jobs are the aht105 user).  It appears, to me, that there are 5 nodes running out of 16, and there are many 'old' jobs in the queue (e.g., job 1891544 is from Apr 8).
+
+I suspect there is a problem or I am doing something wrong - I would like to know if you have insight (do I not understand the queue correctly? did I submit the job correctly? do I still have access given from 2011? should I be using a different Lion-X machine?), or if I just need to continue to wait for the job to be processed...
+pic sourcd: tut trash pic/image_que_pbs.png
+
+Answer
+
+What you're seeing in the 'qstat -q' output is only the information for
+the default lionxc queue.  There are also other queues on lionxc.  The
+'Node' column indicates how many nodes a job in that queue can request,
+not how many are in use by that queue.  The 'Run' column indicates how
+many jobs are currently running in that queue.  The 'Que' column
+indicates how many jobs are waiting.
+
+Lion-XC is one of the older and smaller machines that we run.  You would
+probably see faster turnaround on a newer cluster like Lion-XF or Lion-XG.
+
+Your jobs look OK for the most part.  One thing to check though would be
+your 'ppn' argument.  Unless you're telling GAMS to use four threads to
+solve your problem, 'ppn=4' will be reserving processor cores for you
+that you won't be using and will make your job wait longer in the queue
+than necessary since you'll be waiting for more resource to become
+available.
+
+
+
+Question
+
+I am trying to call an opensees .tcl file  from a matlab script like this:
+system('opensees filename.tcl')
+
+I have had no problems running this on windows on my system. When I try to run the matlab program on hammer i get the following error:
+/bin/bash: opensees: command not found
+
+This is what I did:
+loaded both opensees and matlab separately from two different terminals, ran the matlab code normally.
+The error pops up while the 'system' command is encountered.
+
+Kindly let me know where I am going wrong.
+
+Answer
+You need to load both the modules on the same terminal before you launch matlab.
+
+
+Question
+
+I've used the clusters before to run C++ and fortran code, but now I would like to use them to run a Java program that I have written. The java program is multi-threaded. Is there a tutorial or simple explanation for how to do this?
+
+Answer
+java (v1.6.0_45) is loaded by default on the clusters. 
+Assuming that you have a "binary" folder named "bin", a source folder "src" containing you .java files, and a library folder "lib" which contains some .jar files you want to use, you can compile your source files the following way:
+
+javac -d bin -sourcepath src -cp lib/myThirdPartyLibrary.jar src/myClass.java
+
+This will create a corresponding .class file in the directory bin: bin/myClass.class
+
+To run the java program, just type in: 
+
+java [options] -cp bin;lib/myThirdPartyLibrary.jar myClass
+
+where [options] can be specified from the options available found by typing java -help, and myClass the class you want to execute. 
+-cp specifies the "classpath", which corresponds to directories and .jar files where java will look for classes. You could also set the CLASSPATH environment variable manually.
+
+
+I am currently trying to determine when (if ever!) my scheduled jobs will start on lionxg, but I get the following error:
+
+[jrw32@lionxg scripts]$ showstart 771769[0]
+ERROR:    communication error lionxg:42559 (client timed out after 30 seconds)
+
+Is there another way to check the expected start time of jobs?
+
+Answer
+Please check your job. One reason could be that your particular job is too big. jobs which is probably why it times out showstart and is still queued. Please avoid submitting multiple jobs through one PBS. You can use  "qstat -t -u jrw32" to show more information about your jobs but it does not show the start time unfortunately , 
+
+
+Question
+
+I'm curious if I can get some help running a software package called cp2k on the penn state clusters. I have access to cyberstar and a few of the lion cluster machines, but I'm not sure how to get cp2k working on my own.
+
+We don't have all packages that all our students might want currently installed ofcourse, however if it's an open source package that is of particular importance to your research we can get it installed for you, please send us a short review of your research and the name and version of the package.
+ 
+Question
+
+ I'm having with an issue when running a package on the cluster. When I attempt to access Gambit through Hammer (using the "terminal"), I receive the following error message: 
+
+source: terminalreturn_gambitQA.png
+
+From the warnings/errors I receive, I don't appear to have a GAMBIT.1176 file in that particular directory (which I don't), and my quota is exceeded (I have deleted files so I'm not sure why that is). Is there something I can do to avoid this error? All I'm doing is typing in the commands: "module load gambit" and "gambit". I had created a .jou file in Gambit earlier in the week, then this just happened. 
+
+Answer
+
+Most likely the root cause of your error is that you have exceeded your quota. If you have been deleting your files from the GUI, then they are still taking up your space in your home directory. You can clear this space up using the command: rm -r ~/.Trash . Gambit tries to create the directory GAMBIT.1176 but fails because the disk quota has been exceeded. Then, when it tries to access the directory, it fails because the directory does not exist.
+
+We hope that you are already using Exceed onDemand (http://rcc.its.psu.edu/user_guides/remote_display/exceed_on_demand/) for remote display.
+
+
+
+Question
+Is it possible to run a job  on cyberstar such that my process will have exclusive use of the caches for a processor?  I am trying to profile the cache misses but I think it is still possible that my job will be sharing the processor and caches with some other users' jobs
+
+Answer
+When you submit a job in our LionX clusters you also ask for a certain amount of memory and CPU wall time (similar to CPU hour time)and other resrouces. Your job basically will be queued untill these resources become available and hence secured for your particular job until it's finished. So, it won't be sharing the assigned, as requested from your PBS file, with any other user who might also be running a job on the same node. 
+
+
+Question
+I am a PhD student in Civil Engineering at PSU and working with Dr. Gordon Warn.
+
+In my research study, I am studying multi-objective optimization of a certain structural systems and I am using an optimization algorithm called NSGA-II.
+
+I have defined all my problems in Matlab. NSGA-II code is also available in Matlab. 
+
+I am now planning to initiate the analysis. However, it seems that an analysis takes very long times such as 20-25 hours. I am seeking ways to decrease the computation time. 
+
+That's why, I want to learn how I can use university clusters?  Moreover, as you might see in the attached file the NSGA-II code in Matlab provides parallel computation option. I would like to learn how to parallelize the code.
+
+I will appreciate if you can help me on these issues. I might visit your office at your convenience during the week as well to get more information.
+
+Answer
+
+First, you can apply for an account on RCC systems here: https://rcc.its.psu.edu/resources/accounts/individual/ .
+
+Once you have an account you can look at this webpage for instructions on how to use MATLAB: https://rcc.its.psu.edu/resources/software/matlab/ .
+
+Since your analysis takes 20-25 hours, you will be using PBS scripts to submit batch jobs to Lion-X clusters as shown on the webpage above.
+
+You should be able to use the parallel features of the NSGA-II code. Information on parallel MATLAB is provided here: https://rcc.its.psu.edu/resources/software/dmatlab/ . You will probably need to comment out the worker launch command in the NSGA-II code, the rest should work fine as is.
+ 
+
+Question
+
+
+I have been running quite a few single processor jobs on cyberstar and I noticed that jobs on certain nodes are running much slower than other nodes (they are about 4 times as slow). I am having problems with nodes around 210, although I don't know exactly which ones (cyberstar207 is definitely one of the slower nodes). This makes it difficult to keep a consistence walltime for all of my jobs. I am wondering if you are aware of this and if it is the result of different hardware used for these nodes. Is there a way to avoid certain nodes when submitting jobs?
+
+There are three different node types in CyberSTAR: Intel Nehalem nodes,
+AMD Shanghai nodes, and Intel Westmere nodes.  The Westmere nodes are
+the fastest and the Shanghai nodes are the slowest.  You can request a
+particular node type by adding 'westmere', 'nehalem', or 'shanghai' as a
+feature request in your PBS node request.  For example:
+
+   #PBS -l nodes=1:westmere:ppn=1
+
+Note that requesting a specific node type will probably increase the
+wait time of your jobs since a smaller portion of nodes will available
+to your jobs.
+
+Question
+Would it be possible to upgrade BEAST 1.7.4 on the rcc systems to 1.7.5? There is some improved functionality that would be very useful.
+
+Answer
+Please send us a request and we will be following up on it.
+
+
+Question
+ I am trying to switch from Makefiles to Cmake for my solver I use in my research.
+ I have created a visualization library for my self which supports XMF and VTK but inside CMakeLists.txt file, I need to 
+use find_package command for linking HDF5 (needed by xmf) but this command automatically links hdf5/1.8.3 by default
+ whereas I need to use 1.8.6 which has support for C++.
+ Since "find_package" uses system defaults(at least that is what I observed), changing my profile path and library does not help. I was wondering how can I change the default version of hdf5 to be linked from 1.8.3 to 1.8.6. Is there a way you could change this for all the users? 
+
+
+answer
+
+it's not a priority to change the defualt settings for each particular users, usually there are workarounds that could save 
+both your time and saves us extra changes on the system settings in general.
+
+
+Question
+I am trying to use totalview to debug MPI code. Once I login to lionx*, I can use "module load totalview" and "totalview" then th GUI opens. However, once I submit an interactive job with "qsub -I" and follow the module load procedure, I get the following error;
+
+Unable to open X display. Please check your $DISPLAY environment
+variable to ensure that it is defined correctly and that you are
+authorized to connect to this X server.
+
+
+Answer
+You have to add the flag -X to qsub to be able to have remote display with an interactive session:
+qsub -X -I [other flags]
+
+You also have to be connected to the cluster with X forwarding (i.e. ssh -X -Y).
+
+Question
+
+Dear RCC services:
+
+May I please request a research group account to use the following HPCs; Lion-XF, Lion-XH, Lion-XI, Lion-XJ, Hammer, and Lion-LSP. 
+
+Please add the following Penn State user IDs to this group account, hif1, jhm10, eah25, rjs360, tjw5183, nut114, and yxw186.  
+
+
+Please sent us the name of the users you want to be added in the Group, and a name, data storage capacity and we will create the Group with the users as you requested! 
+
+
+
+Question
+
+Hello, I am new to ABAQUS, and I have some questions about creating a few structures and analysis.  When I was introduced to ABAQUS at one of RCC's Seminars I remember that help was available.  I was hoping that I could set up an appointment with someone next week to talk through some of my troubles. Please let me know how we could set something up.
+
+Answer
+Please send us an email, a short review of your simulation set up, requirements and your advisor. We will set up an appoinement shortly after!
+
+
+Question
+I'm trying to rsync a lot of files from my blade in the CSE department to the cluster. Right now I have too many files to fit under the limit, so I have a script that will recursively rsync subfolders until it runs out of space. Unfortunately I keep getting ssh_exchange_identification: read: Connection reset by peer errors after a short period of time. Is this related to a firewall issue? I know we talked about something similar in the past. What can I do? 
+
+Answer
+A suggestion would be to use rsync over ssh to transfer the file.  If 
+the transfer gets interrupted, rsync can continue from where it left 
+off.  For example:
+
+   rsync -av --partial -e ssh example.tar.gz 
+userid@hammer.rcc.psu.edu:~/scratch/
+
+
+
+Question
+
+I have completed a model on my personal computer and have files ready to run in Abaqus.  
+How do I put those files onto hammer so that I can use them on Abaqus?  I.e. get the files from my computer onto the hammer network.
+
+Answer
+
+Please take a look at the following link:
+
+http://rcc.its.psu.edu/user_guides/file_transfer/
+
+Question
+ How do I get help regarding my HPC needs?
+Answer
+Please look up our FAQ page first if your question wasn't listed here please contact us at rcc@rcc.its.psu.edu! 
+
+Question
+
+ I'm a UNIX user and now have a Windows desktop. How do I connect to CHPC systems and use X-Windows programs?
+Anwer
+You'll need both X-windows server software (like Exceed, Xming, Xwin32) and a secure shell package, such as SecureCRT or Putty. Below are the steps to configure Exceed and SecureCRT:
+
+    Once Exceed is installed:
+        Click Start -> Hummingbird -> Exceed -> xconfig (or rt. clic k Exceed in Task Bar -> Tools -> configuration)
+        Dbl click on Security icon and select "Enabled (no host acce ss)".
+        Click "OK" and close window. 
+
+Once puttyis installed:
+
+    Start SecureCRT.
+    Click File -> Quick Connect
+    Set Protocol: ssh2
+    Hostname:
+    SSH Server: Standard
+    Click on the "Advanced.." button -> click on the "Port Forwarding" tab and check the "Forward X11 Packets"
+    Click OK 
+
+categorization at uky
+
+Frequently Asked Questions about:
+
+    Accounts
+    Logging in
+    Home and Scratch Disk
+    Batch Jobs
+    Long Term Storage
+    Compiling and Linking
+    MPI
+    GPUs
+    Transferring Files
+    Text Editors
+    Secure Shell (ssh)
+    Gaussian
+    Amber
+    NAMD
+    ANSYS
+    Fluent
+    VASP
+    Fieldview
+    MolPro
+    Octave
+
+
+Frequently Asked Questions
+
+    1. What is my 'home' directory?
+    2. How do I check my disk quota?
+    3. Why do I get the message disk quota exceeded?
+    4. What is 'scratch' space?
+    5. How do I check the available disk space on a filesystem?
+    6. Is my scratch space the same on all machines in the cluster?
+    7. Can two of my jobs interfere with each other, where files from one job over-write files from the other??
+    8 How long can files remain in my scratch directory?
+
+1. What is my 'home' directory?
+
+Each user has space allocated on the /home filesystem for programs, code, and modest amounts of data. The path is /home/userid and there is a quota (limit) on how much space you can use. Your home directory is backed up nightly.
+2. How do I check my disk quota?
+
+Use the quota command.
+3. Why do I get the message disk quota exceeded?
+
+If you run a large job from your /home directory, then you can easily exceed your disk quota. In order to run jobs without exceeding your disk quota, create any large files in your scratch directory (/scratch/userid).
+4. What is 'scratch' space?
+
+Scratch space is temporary disk space for actively running jobs. You have your own scratch area in /scratch/userid where your jobs won't interfere with others. There is a link to this in your home directory (/home/userid/scratch) for your convenience.
+
+There are no quotas on the /scratch filesystem and your jobs can write data to the limit of the filesystem. However, there is a finite amount of space and that space is shared among all users. Use the command df -h /scratch to check the current usage of the scratch file system.
+
+If scratch fills completely, then most active jobs will fail. Whenever scratch becomes dangerously full, the system administrators will take countermeasures, including canceling running jobs.
+
+Only put files in scratch temporarily! Make sure you don't put source code or other hard to recreate files in scratch, unless you have another copy stored elsewhere. Large files that need to be stored for an extended time may be transferred to the HSM near-line storage system. See Long Term Storage for more information.
+5. How do I check the available space on a filesystem?
+
+Use the df -h command to list information about each available file system.
+6. Is my scratch space the same on all machines in the cluster?
+
+Yes. The global clustered file system presents the same home and scratch filesystem to the login nodes and all of the compute nodes.
+7. Can two of my jobs interfere with each other? Will files from one job over-write files from the other?
+
+Yes, but only if the files have the exact same pathname. The easiest and safest way to prevent that is to make separate scratch directories for the files for each job, either by hand or by using the mktemp command to create a unique directory name.
+
+Note: this problem will not normally occur with Gaussian jobs. The script that sets up the job creates a unique scratch directory for each job. However, if you run two jobs from the same directory using the same Gaussian file command file name, then the output file from the first job to finish will be overwritten by the second. Don't run jobs with the same Gaussian command file name from the same directory.
+8. How long can files remain in my scratch directory?
+
+Files in the scratch filesystem are NOT backed up. Files left in scratch more than 30 days may be deleted. Once a file is deleted from a scratch directory, it is permanently gone. It is each user's responsibility to keep copies, either in the home directory or in some other location
+
+Only put files in scratch temporarily! Make sure you don't put source code or other hard to recreate files in scratch, unless you have another copy stored elsewhere. Large files that need to be stored for an extended time may be transferred to the HSM near-line storage system. See Long Term Storage for more information.
+in other words:
+Do the /scratch filesystems on arches support file locking?
+
+
+Frequently Asked Questions
+
+    1. How do I compile an executable file to run as an MPI application?
+    2. Which compilers should I use to compile an MPI application?
+    3. How do I execute an MPI program on multiple cores?
+    4. Where can I get more MPI documentation?
+    5. How do I use multiple-level parallelism?
+
+1. How do I compile an executable file to run as an MPI application?
+
+To compile a source file named my_app written in C, use the command:
+mpicc -o my_app my_appl.c
+
+To compile a source file named myapp written in Fortran 90 use the command:
+mpif90 -o myapp myapp.f90
+
+See the MPI Documentation section of this Web site for more information on MPI compiling.
+
+Also, see man mpicc for C compiler specifics and man mpif90 for Fortran90 compiler specifics.
+2. Which compilers should I use to compile an MPI application?
+
+For applications in C use mpicc. For applications in Fortran 90 use mpif90.
+3. How do I execute an MPI program on multiple nodes?
+
+Create a shell script and submit it to the batch scheduler. For example, the script file myscript might look like this:
+#!/bin/bash
+mpirun mybinary
+
+If you prefer a different shell, you can use sh, ksh, csh, or bash. We recommend bash, which is the default.
+
+Run it with a command like sbatch -n t myscript, where t is the number of tasks. The batch scheduler will distribute the job over the required number of nodes.
+4. Where can I get more MPI documentation?
+
+See the MPI documentation in the Documentation section.
+5. How do I use multiple-level parallelism?
+
+To use multiple-level parallelism, which is running an MPI job that uses OpenMP, loop-parallelism, or that calls a parallelized library routine, consult the Multi Node Parallelism documentation.
+
+
+
+Please don't run non-GPU code on the GPU nodes!
+
+There are four GPU enabled nodes on the DLX supercomputing cluster. The nodes are identical to the basic compute nodes (12 cores with 36 GB of RAM), except that each node has four Nvidia M2070 GPUs attached. GPU enabled code often runs many times faster than on a CPU.
+The limit on the GPU queue is one day (24 hours).
+
+If you do not put a time limit on jobs submitted to the GPU queue they will wait in the queue forever!
+Add #SBATCH -t 24:00:00 to your batch job script before submitting it.
+Frequently Asked Questions
+
+    1. How do I run a job in the GPU queue?
+    2. How do I use Amber with GPUs?
+    3. How do I use Abacus with GPUs?
+    4. How do I use NAMD with GPUs?
+    5. Can I write my own GPU code?
+
+1. How do I run a job in the GPU queue?
+
+To run a job with GPU enabled code put the SBATCH option into your job script:
+#SBATCH --partition=GPU
+
+Or add the partition flag to the sbatch command.
+sbatch -n12 -pGPU aaa.sh
+
+One or the other is enough, you don't need to do both.
+2. How do I use Amber with GPUs?
+
+Only the PMEMD module in Amber 11 is GPU enabled, but the Amber sample jobs that CCS tested ran much faster when using GPUs.
+
+See the page Amber on GPUs for information on running Amber on the GPU nodes.
+3. How do I use NAMD with GPUs?
+
+This information will be coming soon.
+4. Can I write my own GPU code?
+
+If you are interested in GPU enabling your own code, then see the extensive Nvidia GPU developer info on the Nvidea web page http://developer.nvidia.com/gpu-computing-sdk.
+
+Note that the "SDK" is a misnomer; this is mostly sample code. The Toolkit is the development environment, which you establish by loading the CUDA module (module load cuda).
+
+
+ HPC FAQ - Transferring Files
+
+Supercomputer documentation is always a work in progress! Please email questions, corrections, or suggestions to the HPC support team at help-hpc@uky.edu as usual. Thanks!
+
+    1. Why would I transfer files?
+    2. How do I transfer files?
+    3. What is a secure shell (ssh)?
+
+1. Why would I transfer files?
+
+You will almost certainly want to upload program or data files from your workstation to the cluster and download results, programs, or data from the cluster to your workstation. You may want to copy data from another site or put data out somewhere for others to see and use.
+
+Use scp or sftp to transfer files to or from the cluster, to or from your workstation, and to or from most other sites. These are related to the ssh (secure shell) client and will encrypt your transfer (and password) in the same way that ssh encrypts your login session.
+2. How do I transfer files?
+
+On Linux, Unix, or MacOS X:
+MacOS X and most Linux and Unix systems come with scp and sftp already installed. If you are using your link blue userid on your workstation, then you may omit it from the scp or sftp commands, as you do with the ssh command. The free OpenSSH client includes scp and sftp, so if you installed it to get ssh, you will get scp and sftp at the same time.
+Using scp is much like using cp
+scp file1 file2 copies file1 (the source file) to file2 (the target file).
+scp aprog.f77 dlx.uky.edu copies aprog.f77 in the current directory on your workstation to your home directory on the DLX. You might be prompted for your DLX password.
+scp aprog.f77 dlx.uky.edu:newprog.f77 copies the same file to the DLX, but gives it a new name.
+scp aprog.f77 userid@dlx.uky.edu:newprog.f77 copies the file to the DLX, but specifies the DLX userid.
+Using sftp is much line using ftp
+$ sftp jdough@dlx.uky.edu
+jdough@dlx.uky.edu's password:
+Connected to dlx.uky.edu.
+sftp> ls
+amber benchmarks1 sbatch.ps scratch test1
+sftp> get sbatch.ps
+Fetching /home/jdough/sbatch.ps to sbatch.ps
+/home/jdough/sbatch.ps 100% 117KB 117.0KB/s 00:00
+sftp> exit
+
+On Windows:
+The programs PSCP and PSFTP are free implementations of scp and sftp for Windows that are widely used. Download them from the PuTTY web page.
+3. What is a secure shell (ssh)?
+
+The secure shell (ssh) is a means of encrypting your login and other sessions. See the Secure Shell page for more information.
+
+
+
+
+
+
+Frequently Asked Questions
+
+    1. What compilers should I use?
+    2. What versions of the Intel compilers are available?
+    3. How do I compile with the Open MPI libraries?
+    4. How do I compile with the Intel MPI libraries?
+    5. Is there any Intel documentation on the compilers?
+    6. Is there any documentation on the Intel Math Kernel Library (IMKL)?
+    7. How can I find out what library dependencies an application has?
+    8. Are the GNU compilers available?
+
+1. What compilers should I use?
+
+The Intel compilers is the compilers of choice for most applications. Use icc for c and c++ programs and ifort for fortran 77 and 90 programs. Add the --help option to one of these to get more information. For example:
+ifort --help
+2. What versions of the Intel compilers are available?
+
+At this writing version 11.1 is current the default for all of the Intel compilers. You don't need to do anything special to use that version of any of them. Older and newer versions are sometimes installed for testing or other special special purposes. Use the command module avail to see all of the modules available, or the command module avail icc command to see just the icc modules. For example:
+$ module avail icc
+--------------- /usr/share/Modules/modulefiles --------------
+icc/10.1 icc/11.1(default) icc/12.0 icc/12.0.3
+
+If module avail shows that version icc/10.1 is available, then load it with the command module load icc/10.1/default command at the beginning of your session to make it the default for the rest of your session.
+3. How do I compile with the Open MPI libraries?
+
+OpenMPI is the MPI of choice for most applications, and it is is the default. Use mpicc for c programs, mpiCC for c++, mpif77 for Fortran 77, and mpif90 for Fortran 90.
+4. How do I compile with the Intel MPI libraries?
+
+If you need the Intel MPI libraries, load them at the beginning of your session with the module command. Use the module avail command to see all of the modules available, or the command module avail mpi/intel command to see just the mpi/intel modules. For example:
+$ module avail mpi/intel
+--------------- /usr/share/Modules/modulefiles ---------------
+mpi/intel/3.0 mpi/intel/3.1 mpi/intel/3.2
+
+If module avail shows that version mpi/intel/3.2 is available, then load it with the module load mpi/intel/3.2/default command at the beginning of your session to make it the default for the rest of your session. Use mpiicc and mpiifort to compile the programs, as before.
+5. Is there any more documentation on the compilers?
+
+There is a lot of documentation on the Intel web site. These might be useful:
+
+Intel© C++ Compiler User and Reference Guides
+
+Intel© Fortran Compiler User and Reference Guides
+6. Is there any documentation on the Intel Math Kernel Library (IMKL)?
+
+There is a lot of documentation on the Intel web site. This might be useful:
+
+Intel© Math Kernel Library Documentation.
+7. How can I find out what library dependencies an application has?
+
+Use the ldd command. To see the ldd online manual use the man ldd command.
+8. Are the GNU compilers available?
+
+Yes. You can use gcc to compile c and c++ programs and gfortran for fortran 77 Fortran 95.
+
+A short help text will be displayed by the gcc --help or gfortran --help commands.
+
+More extensive documentation is in the online manual. Use the man gcc or man gfortran commands.
+
+Documentation can also be found at http://gcc.gnu.org/onlinedocs/.
+
+
+Frequently Asked Questions
+
+    1. What is a batch job?
+    2. How do I submit a batch job?
+    3. Can I run jobs on the login node?
+    4. What types of jobs must be run in batch?
+    5. Which batch queue should I use?
+    6. How do I check the status of my job?
+    7. Why has my job been Pending for so long?
+    8. How many jobs I can run at once?
+    9. Can I kill a batch job?
+    10. How do I checkpoint or restart a job?
+    11. What nodes is my job running on?
+    12. What are MOAB and SLURM?
+    13. Where can I get more information on MOAB and SLURM?
+    14. How do I do a timing run?
+    15. Can I run a job using multiple-level parallelism?
+
+1. What is a batch job?
+
+A batch job is a program or series of programs run on the cluster without manual intervention. Usually a script is used to supply the input data and parameters necessary for the job to run. The script is submitted to the batch schedule will be run when the resources are available. You don't need to specify which node or nodes on which the job will run. The batch system will select a node or nodes appropriately for the job. The batch system also allows for accounting and tracking of jobs.
+2. How do I submit a batch job?
+
+A batch job is submitted to a batch queue using the sbatch command. For details on the commands for batch execution, see the examples (including batch job scripts) in /share/cluster/examples/dlx on the cluster.
+3. Can I run jobs on the login node?
+
+The login nodes are intended for editing files, compiling code, running short tests, and similar activities. Please your jobs as batch jobs whenever you can. As a special case, interactive jobs up to 120 cpu-minutes may be run in on the login node. If you your job exceeds this limit it may be canceled. The login nodes are shared by all of the cluster users, so any job that does intensive computing, produces heavy I/O, or spawns large number of processes will adversely affect the whole node. Please respect your fellow users!
+4. What types of jobs must be run in batch?
+
+The batch system (MOAB and SLURM) must be used whenever possible. Non-batch jobs on any node except the login node will be killed, unless special permission has been obtained in advance. Send email to the Help HPC list at help-hpc@uky.edu to make arrangements.
+5. Which batch queue should I use?
+
+Use the sinfo command when logged in onto the cluster to show the names of the queues and other information about them. Use sinfo --help or man sinfo to get more information about the command.
+
+Note that the queues are defined with particular types of jobs in mind, to make sure jobs have the appropriate resources and don't interfere with one another. Please run your job in the appropriate queue! If you have questions, or you need to do something you can't do under the queuing system, please send email to the Help HPC list at help-hpc@uky.edu describing your problem or question.
+6. How do I check the status of my job?
+
+Use the squeue command to show the status of batch jobs. The default is to show all pending and running jobs. Use squeue -u myloginid to see your own jobs. Use squeue --help or man squeue to get more information about the command.
+7. Why has my job been Pending for so long?
+
+Use checkjob -v to see why your job is pending.
+
+There may be pending jobs ahead of yours. You can see the pending jobs in your queue with the squeue -t pending command.
+
+The batch system manages the flow of jobs and allows jobs to run when the system resources are available to do so in a fair and orderly fashion. When the system is less busy you may submit jobs that are able to schedule and execute quickly. When the system is busier, your jobs could wait for longer periods. This interval will vary based on many factors.
+
+If your job has been pending for longer than you expect, please try to find out why before you submit a trouble report. There are commands to get this information. More often than not; your job is just waiting on the resources you requested.
+
+Depending on factors involved, such as your job's anticipated run time, you might be able to pick a different queue for quicker turn-around. See ??? for more queue info.
+
+Your job will be scheduled automatically when the requested resources are available.
+8. How many jobs I can run at once?
+
+Job queues and node allocations have been established to assure equitable distribution and access to the entire complex.
+
+See the README First page for specific information.
+9. Can I kill a batch job?
+
+Use scancel job_id to terminate a batch job. The time required for the job to actually terminate will vary some, depending on how busy the system and the network are, and on how many parallel processes the job is running. You can use the squeue command to find the jobid (see above).
+10. How do I checkpoint or restart a job?
+
+This answer needs revision.There are two webpages which go over this topic. One concerns checkpointing, the other concerns restarting checkpointed jobs. The checkpointing page is here; the restart page is here. There are several methods of checkpointing, read both pages before attempting to checkpoint or restart a job.
+11. What nodes is my job running on?
+
+The squeue command shows the status of batch jobs (see above).
+12. What are MOAB and SLURM?
+
+MOAB is the batch job scheduler that decides which jobs should run next. SLURM is the Resource Manager that allocates compute nodes upon request. Together they submit the jobs, select the most suitable hosts, and interact with the individual tasks of parallel batch jobs.
+
+A batch job is submitted to a queue with the sbatch command. The batch system then attends to all of the details associated with running it. A batch job may not run immediately after being submitted if the resources it needs (usually compute nodes) are not available. The job will wait until it reaches the front of the queue and the resources become available. At that time the batch job will be dispatched to the most suitable host or hosts available for execution.
+13. Where can I get more information on MOAB and SLURM?
+
+The vendor's documentation on MOAB is at http://www.clusterresources.com/products/mwm/docs/.
+
+Also see the Lawrence Livermore Moab Quick-Start User Guide at https://computing.llnl.gov/jobs/moab/QuickStartGuide.pdf.
+
+The Lawrence Livermore SLURM: A Highly Scalable Resource Manager is at https://computing.llnl.gov/linux/slurm/.
+14. How do I do a timing run?
+
+This answer needs revision.A timing run - a type of job used to determine how effectively a program or algorithm performs - needs to be run without sharing a cpu with any other job.
+
+Otherwise, the measurements aren't valid because some cpu time will be lost in time-sharing with the other job(s) - exactly how much would be lost is unpredictable, and would vary between runs. The cluster is set up to allow timing runs on up to 32 processors; if you need a larger timing run, please send email to the Help HPC list at help-hpc@uky.edudescribing your request.
+
+Note: Depending on the cluster load, larger timing runs may not be possible even given several weeks prior notice.
+
+Do not try a timing run until you are certain your program runs properly. Debug your program, algorithm, and test data using the normal batch queues before trying to do a timing run.
+15. Can I run a job using multiple-level parallelism?
+
+This answer needs revision.A multiple-level parallel job is an MPI job with sub-processes that use parallelized library routines, OpenMP, or routines using loop-parallelism; also known as mixed-mode). Consult the following links more OpenMPI information.
+
+Link for OPENMPI documentation: http://www.open-mpi.org/doc/v1.4/.
+
+FAQ: http://www.open-mpi.org/faq/.
+
+LLNL Tutorial: https://computing.llnl.gov/tutorials/mpi/.
+
+Another tutorial: http://www.lam-mpi.org/tutorials/.
+
+MPI FORUM: http://www.mpi-forum.org/.
+
+
+
+
+FAQ: Batch
+
+    What is a batch system?
+    What batch system is used at CHPC?
+    What is a Scheduler?
+    What Scheduler is at CHPC
+    How do I submit a job?
+    How do I get information about my job after it's submitted?
+    Where can I find a list of batch system commands?
+    Are there sample scripts online?
+    What is the /scratch directory that I see in the sample script, and why should I use it?
+    Where should I submit my script from?
+    Is there a limit on the number of jobs I can have in the batch system at one time?
+    How can I run a job which is longer than the standard queues allow?
+    Are there limits on the number of cpus I can use for parallel jobs?
+    Why do some jobs submitted after mine run before mine?
+    Can I run my jobs in the background in batch?
+    I'm having problems with my script, what should I do?
+    What happens when my allocation runs out?
+    PBS seems to be ignoring all the #PBS directives
+
+Back to main FAQ
+Q: What is a batch system?
+
+A batch system is used to monitor and control the jobs running on a system. It enforces limits on runtime (walltime) as well as the number of jobs running at one time (both total and per user). To run a job, the batch system allocates the resources requested in the batch script, sets up an environment to run the job in (thus running the users .cshrc and .login files), and then runs the job in that environment. In this environment, standard out and standard error are redirected into files in the current working directory at the time the executable is actually run.
+Q: What batch system is used at CHPC?
+
+PBS (Torque distribution) is used on all systems at CHPC. On most CHPC systems the Maui scheduler is used. Please see (PBS Page).
+Q: What is a scheduler?
+
+A scheduler works with the batch system to increase throughput and enforce policies on the system.
+Q: What scheduler is used at CHPC?
+
+CHPC uses Maui on all of its platforms.
+Q: How do I submit a job?
+
+To submit a job to a batch system, you must first write a batch script. The script contains batch system directives as well as normal unix commands, one of which is a unix command to run your job. Once you have a script, you can submit your job to the batch system by submitting your script to the batch system.
+
+To submit a script to the batch system you must use the PBS command "qsub". The appropriate syntax is "qsub scriptname". There are also certain command line options that can be used. For a more detailed description as well as other commands for PBS check the PBS page.
+Q: How do I get information about my job after it's submitted?
+
+You may use the PBS/Torque command "qstat" but the Maui/Moab command "showq" is preferable. For more information on "showq" see the Maui User Commands.
+Q: Where can I find a list of batch system commands?
+
+A list of PBS commands can be found at the bottom of the PBS commands
+Q: Are there sample scripts online?
+
+Sample PBS scripts as well as general PBS information can be found on the PBS page. From that page are links to the specific platform user guides which have sample scripts.
+Q: What is the /scratch directory that I see in the sample script, and why should I use it?
+
+Your home directory space is visible to each node of the system. However if you are reading or writing large data files in your home directory, then the data will have to pass over the network to or from the file server. This slows the access down considerably and creates a lot of network congestion.
+
+CHPC has several /scratch filesystems. The fastest is /tmp. The reason for this is simple - the /tmp filesystem is local to each node, and there is no delay for network access. The disadvantage is you can not check on your output during your run. Also, in the event your job doesn't complete normally, you may not be able to retrieve the files from this local space.
+
+The other /scratch spaces available are /scratch/serial, /scratch/serial-old, /scratch/da, /scratch/mm. The first two are availble on all of the arches clusters. /scratch/da is only available on delicatearch, and /scratch/mm is only available on marchingmen.
+
+The scratch directory is a filesystem space for writing temporary files. Scratch is generally not a safe place to keep anything long term. Any file with a modification date more than 30 days old is removed from scratch. Scratch is not backed up.
+Q: Where should I submit my script from?
+
+Scripts can only be submitted from the one of the interactive nodes. There are 2 interactive nodes for each cluster but you may submit jobs to any cluster from any interactive node by using the full path to the qsub command.
+
+Also, the script should probably be submitted from and live somewhere in your home directory structure. It should not live in /scratch since usually one of the last commands in the script itself is to delete your temporary /scratch subdirectory. Scratch is not a safe place to keep anything long term. Any file with a modification date more than 30 days old can be removed from scratch. Scratch is not backed up.
+
+All scripts are submitted to the system by typing the command "qsub" scriptname. This will submit to the cluster's queue associated with the interactive node you are on. If you want to submit to a different cluster than the one you're logged into, you may use the full path to the qsub command. For example, if you are logged into a marchingmen node and wish to submit to sanddunearch, instead of "qsub" scriptname, you would enter /uufs/sanddunearch.arches/sys/bin/qsub scriptname.
+Q: Is there a limit on the number of jobs I can have in the batch system at one time?
+
+The policy on this is that there is no limit to the number of jobs a user can have submit to the queue, but a user cannot use more than half of the available resources on a platform at a time. Also, if you have more than 5 jobs waiting in the queue, the first 5 will be eligible for scheduling and the rest will be blocked. As jobs move through the queue, the blocked jobs will move to the eligible queue.
+Q: How can I run a job which is longer than the standard queues allow?
+
+To run a job which is longer than is allowed in the standard queues, you must get special access. To request access, you must send email to the CHPC director at Julio.Facelli@utah.edu explaining the purpose of your request, and justifying your request by explaining, for example, why it is impossible to checkpoint your job.
+Q: Are there limits on the number of cpus I can use for parallel jobs?
+
+You can use up to half of the available resources at a given time, either as one job, or several smaller jobs. If you need more you must send email to the CHPC director at Julio.Facelli@utah.edu explaining the purpose and scope of your request.
+Q: Why do some jobs submitted after mine run before mine?
+
+Queueing systems generally try to minimize the average wait time for everybody. If the system can not acquire the resources necessary to run your job, but does have the resources to run another (probably smaller or shorter) job that is later in the queue, then it may decide to run that job in the interest of overall throughput. The Maui Scheduler is setup so that reservations are made for jobs waiting in the queue. The Maui Scheduler takes information such as QOS, walltime, and nodes and places a reservation based upon what the Scheduler thinks is going to be the earliest released nodes. However, sometimes jobs finish when the Scheduler had not anticipated, so other jobs are able to be placed on those nodes. All jobs are going through strict policies before being entered into the system and fairness is always applied. For more information read the Maui Scheduler User's Guide.
+Q: Can I run my jobs in the background in batch?
+
+You should NEVER try to run your job in the background (by having a "&" character after the line which runs your executable in your batch script) on the batch systems. If you do so, the batch sytem may lose track of some of your processes which may result in processes being killed, a loss of data, and/or your script doing its final cleanup before your job actually completes.
+Q: I'm having problems with my script, what should I do?
+
+First consult the PBS page or the individual systems user guides. Then consult all the other batch questions on this page.
+
+If you still can not get your script to work, send email to issues@chpc.utah.edu with either the script included in your email, or a path to it (make sure you have the permissions set so that the user services staff can get to it). Also any other information about jobs is extremely helpful for us.
+Q: What happens when my allocation runs out?
+
+Your jobs priority is greatly reduced. The QOS (Quality of Service) is changed to 0, which means you will only run if the resources are not in use by another user with an allocation. Sometimes this QOS is referred to as "freecycle".
+Q: PBS seems to be ignoring all the #PBS directives in my script. What's going on?
+
+Most likely you have a non-#PBS line in your script which precedes other #PBS lines. This is not allowed in a PBS script. You can not have anything, not even blank lines, preceeding the #PBS lines in your script. The only possible exception to this is comment lines beginning with #.
+
+
+
+
+
+another format:
+General
+Accounts
+Batch Systems
+Programming
+
+
+Question
+
+Our lab is looking to restore previous versions of folders dated on or around 3/19/2013, specifically the folders:
+
+S:\nad12\facescene\Analysis_ret
+
+S:\nad12\facescene\Func_ret
+
+S:\nad12\facescene\scripts
+
+Please let me know if this can be done. 
+
+Thank you,
+
+
+
+answer
+The backup system only keeps three versions of a file for a maximum of
+90 days, so we can't go back to 3/19/2013.  It looks like the best we
+may be able to do is mid-April for Analysis_ret and mid-May for Func_ret
+and scripts (and even then some files may be missing if they still exist
+but have been modified more than three times since then).
+
+Thanks,
+
+
+Question
+
+yeah I was afraid of this. This will make it harder to get scheduled won't it? and why do you think it's also failing on clusters that dont enforce memory usage? 
+extra:
+I think the key here is finding what size of Java heap (and
+corresponding pmem request) is sufficient to run your job on the
+clusters that enforce memory usage.  I can make your job run on XF with
+a pmem request of 14gb (I've now seen the java process allocate up to
+12.2 GB), but it's quite possible that pmem request can be reduced if
+the heap size is set.  It sounds like 3.5 GB is too small, but there may
+be a middle ground between 3.5 GB and 12.2 GB.  It'll probably take a
+few iterations to figure out if this middle ground exists and where it's at.
+answer
+
+The more resource you request, the longer it can take the job to start
+since more resource needs to free up.  That's why we typically try to
+set the Xmx value to what's necessary rather than letting Java allocate
+huge heaps.
+
+The reason why the newer clusters use memory reservations is that the
+older clusters can be unreliable for larger memory jobs because there is
+no awareness in the job scheduler as to how much memory really is
+available on a node without using the memory reservations.  Your jobs on
+the older clusters could be failing just because the physical memory
+isn't there or because it's in use by other jobs.
+
+
+
+note on packages R:
+College: Agriculture
+
+Department: Ecosystem Science and Management
+
+Role: Postdoc
+
+Faculty_Advisor: Duane Diefenbach
+
+Research_Topic: Currently I am doing population modelling and simulations relating to management of of Allegheny woodrats.
+
+Special_Requests: Mostly (for now) I will be using R. Some of the packages I currently use are msm, MASS, reshape, Matrix, matrixStats. Others I might use are RMark, R2WinBUGS, and r2jags. Use of these latter three, respectively, also requires installation of the freeware MARK (http://www.phidot.org/software/mark/), WinBUGS (http://www.mrc-bsu.cam.ac.uk/bugs/winbugs/contents.shtml), and JAGS (http://mcmc-jags.sourceforge.net/). Actually, WinBUGS is no longer supported, so I may eventually make a move to OpenBUGS (http://www.openbugs.info/w/). The R interface for this program is R2OpenBUGS.
+
+
+
+
+Question
+
+ I cannot compile and run a C++ code in the clusters by using a pbs file.
+> Previously, I was running Matlab codes, they were working fine.
+> (For the C++ codes, I am using g++ compiler.) How can I run C++ codes by
+> using pbs files?
+>
+> Since I cannot use pbs files, I am running my C++ codes directly from
+> the command window of the clusters (such as xi). But, after a while
+> (~1 hour), the process was killed. Is this because of some time-out that
+> is set for command window usage?
+
+Answer
+When I submit the job, it is completed immediately. 
+Also, file.pbs.e.... and file.pbs.o..... files do not occur in the directory. 
+And, when I check the job queue, there is a message saying *You have new mail in /var/spool/mail/fwk5027*.
+
+My pbs file is as follows:
+
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=5:00:00
+cd $PBS_O_WORKDIR
+g++ file.cpp
+./a.out
+
+Your output directory path has a space in it: the "CPP version" in
+/gpfs/home/fwk5027/work/p-val-clus/20041215-1242.port006/CPP
+version/pval_based_pval_of_clus/pval_based_pval_of_clus/.  PBS doesn't
+like spaces and is having problems returning the output file to you.  If
+you change "CPP version" to "CPP_version", you should at least start
+receiving output files.
+
+Thanks,
+
